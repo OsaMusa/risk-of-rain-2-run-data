@@ -1,0 +1,7 @@
+# Byte compiled folders
+__pycache__/
+
+# Files used for dev testing
+ror2_run_data_analysis.ipynb
+settings-dev.txt
+run_report_db.db
