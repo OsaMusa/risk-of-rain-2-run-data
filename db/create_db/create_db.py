@@ -1,4 +1,8 @@
 import sqlite3
+from add_cols import enemies
+from add_cols import items
+from add_cols import equipment
+from add_cols import stages
 
 con = sqlite3.connect('../run_report_db.db')
 cur = con.cursor()
@@ -85,4 +89,19 @@ cur.executescript(
     '''
 )
 
+enemies.add_dmg_dealt(enemies.enemy_names, cur)
+enemies.add_dmg_taken(enemies.enemy_names, cur)
+enemies.add_kills(enemies.enemy_names, cur)
+enemies.add_elite_kills(enemies.enemy_names, cur)
+
+items.add_total_collected(items.item_names, cur)
+items.add_highest_collected(items.item_names, cur)
+
+equipment.add_time_held(equipment.equip_names, cur)
+equipment.add_times_fired(equipment.equip_names, cur)
+
+stages.add_times_visited(stages.stage_names, cur)
+stages.add_times_completed(stages.stage_names, cur)
+
+con.commit()
 con.close()
