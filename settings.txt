@@ -1,2 +1,2 @@
-dir_path = Steam\steamapps\common\Risk of Rain 2\Risk of Rain 2_Data\RunReports\History\
+dir_path = {{Your Risk of Rain 2 Run History Directory}}
 most_recent_run_date = 2019-01-01 00:00:00
