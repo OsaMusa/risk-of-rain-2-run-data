@@ -594,8 +594,8 @@ for run in runs:
 # Update most recent run date
 try:
     most_recent = max([run.date for run in runs])
-
     update_recent_run_setting(settings, most_recent)
+    print('Run data added to database.')
 
 except ValueError:
     print('No new runs!')

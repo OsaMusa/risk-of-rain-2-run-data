@@ -15,11 +15,14 @@ class Run_Report:
         player_info = root.find('playerInfos/PlayerInfo')
         self.stat_sheet = root.find('playerInfos/PlayerInfo/statSheet/fields')
 
+        run_ending = root.findtext('gameEnding')
+        endings = {'MainEnding':'Victory', 'ObliterationEnding':'Obliterated', 'LimboEnding':'Limbo', 'StandardLoss':'Defeat'}
+
         # Run Meta Data
         self.run_id = root.findtext('runGuid')
         self.gameMode = root.findtext('gameModeName')
         self.difficulty = root.findtext('ruleBook').split('.')[1].split()[0]
-        self.ending = 'Victory' if root.findtext('gameEnding') == 'MainEnding' else 'Defeat'
+        self.ending = endings.get(run_ending) if endings.get(run_ending) != None else 'Defeat'
         self.date = dt.strptime(run_date, '%Y-%m-%d %H:%M:%S')
 
         # Player Info
