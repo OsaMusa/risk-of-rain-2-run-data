@@ -15,7 +15,7 @@ cur.executescript(
     );
     
     CREATE TABLE Player_Info (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Player_Name TEXT NOT NULL,
         Survivor TEXT NOT NULL,
         Total_Time_Alive REAL NOT NULL,
@@ -29,7 +29,7 @@ cur.executescript(
     );
 
     CREATE TABLE Damage_Stats (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Total_Minion_Damage_Dealt INTEGER DEFAULT 0,
         Total_Damage_Dealt INTEGER DEFAULT 0,
         Total_Damage_Taken INTEGER DEFAULT 0,
@@ -123,7 +123,7 @@ cur.executescript(
     );
 
     CREATE TABLE Kill_Stats (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Total_Minion_Kills INTEGER DEFAULT 0,
         Total_Kills INTEGER DEFAULT 0,
         Total_Elite_Kills INTEGER DEFAULT 0,
@@ -204,7 +204,7 @@ cur.executescript(
     );
 
     CREATE TABLE Purchases (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Total_Gold_Collected INTEGER DEFAULT 0,
         Max_Gold_Collected INTEGER DEFAULT 0,
         Total_Purchases INTEGER DEFAULT 0,
@@ -221,7 +221,7 @@ cur.executescript(
     );
 
     CREATE TABLE Item_Info (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Total_Items_Collected INTEGER DEFAULT 0,
         Highest_Items_Collected INTEGER DEFAULT 0,
         Total_Collected_CLOVER INTEGER DEFAULT 0,
@@ -432,7 +432,7 @@ cur.executescript(
     );
 
     CREATE TABLE Equipment_Info (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Total_Time_Held_COMMANDMISSILE INTEGER DEFAULT 0,
         Total_Time_Held_FRUIT INTEGER DEFAULT 0,
         Total_Time_Held_METEOR INTEGER DEFAULT 0,
@@ -485,7 +485,7 @@ cur.executescript(
     );
 
     CREATE TABLE Stage_Info (
-        Run_ID INTEGER NOT NULL,
+        Run_ID TEXT NOT NULL,
         Total_Stages_Completed INTEGER DEFAULT 0,
         Highest_Stages_Completed INTEGER DEFAULT 0,
         Total_Times_Visited_BLACKBEACH INTEGER DEFAULT 0,
