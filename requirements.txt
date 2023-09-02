@@ -29,6 +29,6 @@ pywin32==305
 pyzmq==24.0.1
 six==1.16.0
 stack-data==0.6.2
-tornado==6.3.2
+tornado==6.3.3
 traitlets==5.7.1
 wcwidth==0.2.5
