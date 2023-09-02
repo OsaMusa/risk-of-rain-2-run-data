@@ -1,16 +1,9 @@
 import sqlite3
+import pandas as pd
 from datetime import datetime as dt
 from os import listdir
 from os.path import isfile, getctime
 from models.run_report import Run_Report
-
-def update_recent_run_setting(init_settings, most_recent_run):
-    start_date = most_recent_run.replace(second=most_recent_run.second+1)
-    init_settings[1] = 'most_recent_run_date = {}\n'.format(start_date)
-
-    new_settings = open('settings.txt', 'w')
-    new_settings.writelines(init_settings)
-    new_settings.close()
 
 con = sqlite3.connect('db/run_report_db.db')
 cur = con.cursor()
@@ -18,7 +11,37 @@ cur = con.cursor()
 settings_file = open('settings.txt', 'r')
 settings = settings_file.readlines()
 
-dir_path = settings[0].split('= ')[1].strip('\n') + 'RunReports\History\\'
+
+def update_recent_run_setting(init_settings, most_recent_run):
+    # Increment most recent date by 1 second
+    start_date = most_recent_run.replace(second=most_recent_run.second+1)
+    init_settings[1] = 'most_recent_run_date = {}\n'.format(start_date)
+
+    new_settings = open('settings.txt', 'w')
+    new_settings.writelines(init_settings)
+    new_settings.close()
+
+
+def export_tables(table_name):
+    # Get table field names
+    con.row_factory = sqlite3.Row
+    h_cur = con.execute('SELECT * FROM {}'.format(table_name))
+    h_row = h_cur.fetchone()
+    fields = h_row.keys()
+
+    # Get table data
+    res = cur.execute('SELECT * FROM {}'.format(table_name))
+    data = res.fetchall()
+    
+    # Name export file
+    export_path = settings[2].split('= ')[1].strip('\n') + table_name + '.csv'
+    
+    # Create dataframe for table and export it as a CSV
+    df = pd.DataFrame(data=data, columns=fields)
+    df.to_csv(export_path, index=False)
+
+
+dir_path = settings[0].split('= ')[1].strip('\n')
 last_run = dt.strptime(settings[1].split('= ')[1].strip('\n'),'%Y-%m-%d %H:%M:%S')
 
 # Create list of run report files
@@ -30,6 +53,7 @@ for file in listdir(dir_path):
         reports.append(dir_path + file)
 
 runs = [Run_Report(report) for report in reports]
+
 
 # Enter data
 def data_entry(report):
@@ -588,14 +612,25 @@ def data_entry(report):
     
     con.commit()
 
+
 for run in runs:
     data_entry(run)
 
-# Update most recent run date
 try:
+    # Update most recent run date
     most_recent = max([run.date for run in runs])
     update_recent_run_setting(settings, most_recent)
+    
     print('Run data added to database.')
+
+    # Export updated data
+    tbl_qry = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    tbl_names = tbl_qry.fetchall()
+    
+    for tbl in tbl_names:
+        export_tables(tbl[0])
+    
+    print('Run data CSVs updated.')
 
 except ValueError:
     print('No new runs!')
