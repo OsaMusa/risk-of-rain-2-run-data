@@ -2,12 +2,9 @@
 __pycache__/
 
 # Files used for dev testing
-run_db-dev.py
 run_report_db.db
 ror2_run_data_analysis.ipynb
 settings.txt
-settings-dev.txt
-rsettings-dev.txt
 
 # Virtual Environment
 venv/
