@@ -808,12 +808,14 @@ def data_entry(report):
 for run in runs:
     data_entry(run)
 
+print('Run data added to database.')
+
 try:
     # Update most recent run date
     most_recent = max([run.date for run in runs])
-    update_recent_run_setting(settings, most_recent)
+    update_recent_run_setting(most_recent)
     
-    print('Run data added to database.')
+    print('Most recent run date updated in settings file.')
 
     # Export updated data
     tbl_qry = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
