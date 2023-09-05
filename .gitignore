@@ -2,8 +2,11 @@
 __pycache__/
 
 # Files used for dev testing
-run_report_db.db
 ror2_run_data_analysis.ipynb
+SQL/
+
+# Files used/maintained by project scripts
+run_report_db.db
 settings.txt
 
 # Virtual Environment

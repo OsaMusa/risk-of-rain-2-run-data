@@ -808,7 +808,7 @@ def data_entry(report):
 for run in runs:
     data_entry(run)
 
-print('Run data added to database.')
+print(f'Run data for {len(runs)} runs added to database.')
 
 try:
     # Update most recent run date
