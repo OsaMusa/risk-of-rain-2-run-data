@@ -1,14 +1,23 @@
 import sqlite3
 import pandas as pd
 from datetime import datetime as dt
+from pathlib import Path
 from os import listdir
-from os.path import isfile, getctime
+from os.path import isfile, getctime, exists
 from models.run_report import Run_Report
 
-DEFAULT_DIR_PATH = 'C:\\SteamLibrary\\steamapps\\common\\Risk of Rain 2\\Risk of Rain 2_Data\\RunReports\\History\\'
+DEFAULT_DIR_PATH_C = Path('C:/SteamLibrary/steamapps/common/Risk of Rain 2/Risk of Rain 2_Data/RunReports/History/')
+DEFAULT_DIR_PATH_D = Path('D:/SteamLibrary/steamapps/common/Risk of Rain 2/Risk of Rain 2_Data/RunReports/History/')
 DEFAULT_MOST_RECENT_RUN_DATE = '2019-01-01 00:00:00'
-DEFAULT_EXPORT_PATH = 'C:\\Users\\Default\\Documents\\'
-SETTINGS_FILE_PATH = 'settings.txt'
+DEFAULT_EXPORT_PATH = Path('C:/Users/Default/Documents/')
+SETTINGS_FILE_PATH = Path('settings.txt')
+
+# Check which drive the run history is in
+if exists(DEFAULT_DIR_PATH_C):
+    default_dir_path = DEFAULT_DIR_PATH_C
+else:
+    default_dir_path = DEFAULT_DIR_PATH_D
+
 
 con = sqlite3.connect('db/run_report_db.db')
 cur = con.cursor()
@@ -25,12 +34,12 @@ try:
 except FileNotFoundError:
     # Create settings file if one doesn't exist
     with open(SETTINGS_FILE_PATH, 'w') as settings_file:
-        settings_file.writelines(f'dir_path = {DEFAULT_DIR_PATH}\n')
+        settings_file.writelines(f'dir_path = {default_dir_path}\n')
         settings_file.writelines(f'most_recent_run_date = {DEFAULT_MOST_RECENT_RUN_DATE}\n')
         settings_file.writelines(f'export_path = {DEFAULT_EXPORT_PATH}\n')
         
         # Initialize default dict
-        settings = {'dir_path':DEFAULT_DIR_PATH, 'most_recent_run_date':DEFAULT_MOST_RECENT_RUN_DATE, 'export_path':DEFAULT_EXPORT_PATH}
+        settings = {'dir_path':default_dir_path, 'most_recent_run_date':DEFAULT_MOST_RECENT_RUN_DATE, 'export_path':DEFAULT_EXPORT_PATH}
 
 
 def update_recent_run_setting(most_recent_run):
@@ -68,16 +77,16 @@ def export_tables(table_name):
     df.to_csv(export_path, index=False)
 
 
-dir_path = settings["dir_path"]
+dir_path = Path(settings["dir_path"])
 last_run = dt.strptime(settings['most_recent_run_date'],'%Y-%m-%d %H:%M:%S')
 
 # Create list of run report files
 reports = []
 for file in listdir(dir_path):
-    creation_date = dt.fromtimestamp(getctime(dir_path + file))
+    creation_date = dt.fromtimestamp(getctime(dir_path / file))
 
-    if isfile(dir_path + file) and creation_date > last_run:
-        reports.append(dir_path + file)
+    if isfile(dir_path / file) and creation_date > last_run:
+        reports.append(dir_path / file)
 
 runs = [Run_Report(report) for report in reports]
 
